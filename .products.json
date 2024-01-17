@@ -24,12 +24,21 @@
     "price": 1800,
     "thumbnail": "imagen no disponible",
     "code": "fi1113",
-    "stock": 5
+    "stock": 10
+  },
+  {
+    "id": 4,
+    "title": "lechuga",
+    "description": "verdura",
+    "price": 900,
+    "thumbnail": "imagen no disponible",
+    "code": "v1234",
+    "stock": 10
   },
   {
     "id": 5,
     "title": "remolacha",
-    "description": "vegetal",
+    "description": "verdura",
     "price": 3000,
     "thumbnail": "imagen no disponible",
     "code": "v6789",

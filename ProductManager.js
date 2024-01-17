@@ -66,7 +66,7 @@ class ProductManager{
     getProducts(){
         if (fs.existsSync(this.filePath)){
         let fileContent = fs.readFileSync (this.filePath, 'utf8')
-        console.log(fileContent)
+       // console.log(fileContent)
         const productsFromFile = JSON.parse(fileContent)
         console.log(productsFromFile)
         }
@@ -135,9 +135,10 @@ class ProductManager{
 }
 
 
+
 const productManager = new ProductManager()
 
-
+module.exports= ProductManager, productManager;
 
 //prueba
 
@@ -156,9 +157,9 @@ console.log(productManager.addProduct('remolacha', 'verdura', 3000, 'v6789'))
 console.log('---------------------')
 
 console.log(productManager.getProducts())
-console.log(productManager.getProductById(4))
+/*console.log(productManager.getProductById(4))
 
 console.log(productManager.updateProduct(5, {description:'vegetal'}))
 console.log(productManager.updateProduct(3, {stock:5}))
 console.log(productManager.deleteProduct(4))
-console.log(productManager.deleteProduct(6))
+console.log(productManager.deleteProduct(6))*/
