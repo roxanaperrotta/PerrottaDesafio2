@@ -1,7 +1,7 @@
 
 const fs= require ("fs")
 
-class ProductManager{
+ class ProductManager{
     constructor (){
         this.filePath = ".products.json"
         this.products = []
@@ -10,7 +10,7 @@ class ProductManager{
     }
 
    
-    addProduct(title, description, price, code, thumbnail="imagen no disponible",  stock=10){
+     addProduct(title, description, price, code, thumbnail="imagen no disponible",  stock=10){
         
     // crear el producto nuevo
 
@@ -55,7 +55,7 @@ class ProductManager{
  
         else{
               this.products.push(newProduct)   
-              fs.writeFileSync(this.filePath, JSON.stringify (this.products, null, 2))
+               fs.writeFileSync(this.filePath, JSON.stringify (this.products, null, 2))
               return `Producto con código ${code} agregado`
         }
        
@@ -63,28 +63,58 @@ class ProductManager{
  
 //Obtener productos
 
-    getProducts(){
-        if (fs.existsSync(this.filePath)){
-        let fileContent = fs.readFileSync (this.filePath, 'utf8')
+  
+       /* async getProducts() {
+
+            if (fs.existsSync(this.filePath)) {
+            
+            try {
+            
+            let fileContent = await fs.promises.readFile(this.filePath, "utf8");
+            
+            this.products = JSON.parse(fileContent);
+            
+            console.log(this.products);
+            
+            return this.products;
+            
+            } catch (err) {
+            
+            console.error(err);
+            
+            throw err;
+            
+            }
+        }
+    }*/
+            
+            
+            
+    getProducts() { 
+       if (this.filePath){
+        let fileContent =  fs.readFileSync (this.filePath, 'utf8')
        // console.log(fileContent)
         const productsFromFile = JSON.parse(fileContent)
         console.log(productsFromFile)
+        return productsFromFile
         }
     }
+
 //Obtener producto por id
 
-    getProductById(id){
+     getProductById(id){
 
-         if (fs.existsSync (this.filePath)){
-         let fileContent = fs.readFileSync (this.filePath, 'utf8')
+         if (fs.existsSync(this.filePath)){
+         let fileContent =  fs.readFileSync (this.filePath, 'utf8')
          //console.log(fileContent)
          const productsById = JSON.parse(fileContent)
-         return productsById.find(product=>product.id===id)
-       
+          const productoId= productsById.find(product=>product.id===id)
+
+          //return productoId
          }   
 }
 
-   updateProduct (id, updatedFields){
+    updateProduct (id, updatedFields){
    
         let foundProduct = this.products.find(product=>product.id===id)
        
@@ -157,9 +187,9 @@ console.log(productManager.addProduct('remolacha', 'verdura', 3000, 'v6789'))
 console.log('---------------------')
 
 console.log(productManager.getProducts())
-/*console.log(productManager.getProductById(4))
+console.log(productManager.getProductById(4))
 
 console.log(productManager.updateProduct(5, {description:'vegetal'}))
 console.log(productManager.updateProduct(3, {stock:5}))
 console.log(productManager.deleteProduct(4))
-console.log(productManager.deleteProduct(6))*/
+console.log(productManager.deleteProduct(6))
