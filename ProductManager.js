@@ -7,10 +7,10 @@ const fs= require ("fs")
         this.products = []
         
 
-    }
+    };
 
    
-     addProduct(title, description, price, code, thumbnail="imagen no disponible",  stock=10){
+    async addProduct(title, description, price, code, thumbnail="imagen no disponible",  stock=10){
         
     // crear el producto nuevo
 
@@ -23,7 +23,7 @@ const fs= require ("fs")
             code,
             stock
 
-        }
+        };
 
     // Validación de inputs
 
@@ -55,66 +55,48 @@ const fs= require ("fs")
  
         else{
               this.products.push(newProduct)   
-               fs.writeFileSync(this.filePath, JSON.stringify (this.products, null, 2))
-              return `Producto con código ${code} agregado`
+              const productoAgregado = await fs.promises.writeFile (this.filePath, JSON.stringify (this.products, null, 2))
+              console.log(productoAgregado);
+              return  `Producto con código ${code} agregado`
         }
        
-    }
+    };
  
 //Obtener productos
 
   
-       /* async getProducts() {
+       
 
+    async getProducts() {
+        try {
             if (fs.existsSync(this.filePath)) {
-            
-            try {
-            
-            let fileContent = await fs.promises.readFile(this.filePath, "utf8");
-            
-            this.products = JSON.parse(fileContent);
-            
-            console.log(this.products);
-            
-            return this.products;
-            
-            } catch (err) {
-            
-            console.error(err);
-            
-            throw err;
-            
+                let fileContent = await fs.promises.readFile(this.filePath, 'utf8');
+                this.products =  JSON.parse(fileContent);
+                return this.products;
             }
-        }
-    }*/
-            
-            
-            
-    getProducts() { 
-       if (this.filePath){
-        let fileContent =  fs.readFileSync (this.filePath, 'utf8')
-       // console.log(fileContent)
-        const productsFromFile = JSON.parse(fileContent)
-        console.log(productsFromFile)
-        return productsFromFile
+        } catch (error) {
+            console.error('Error reading or parsing the file:', error);
+       
         }
     }
-
+    
 //Obtener producto por id
 
-     getProductById(id){
+    async getProductById(id){
 
-         if (fs.existsSync(this.filePath)){
-         let fileContent =  fs.readFileSync (this.filePath, 'utf8')
+        if (fs.existsSync(this.filePath)){
+         let fileContent =  await fs.promises.readFile(this.filePath, 'utf8')
          //console.log(fileContent)
          const productsById = JSON.parse(fileContent)
-          const productoId= productsById.find(product=>product.id===id)
+         const productoPorId=productsById.find(product=>product.id===id)
+         console.log(productoPorId)
+        
 
           //return productoId
          }   
 }
 
-    updateProduct (id, updatedFields){
+    async updateProduct (id, updatedFields){
    
         let foundProduct = this.products.find(product=>product.id===id)
        
@@ -122,7 +104,7 @@ const fs= require ("fs")
             let selectedProduct = foundProduct;
             Object.assign(selectedProduct, updatedFields);
             const updatedProductString = JSON.stringify(this.products, null, 2)
-            fs.writeFileSync(this.filePath, updatedProductString);
+            await fs.promises.writeFile(this.filePath, updatedProductString);
             console.log(foundProduct)
             return `El producto con ID ${id} fue modificado exitosamente. `
         }
@@ -132,7 +114,7 @@ const fs= require ("fs")
        }
     }
    
-    deleteProduct (id){
+   async deleteProduct (id){
         
         let foundProduct = this.products.find(product=>product.id===id)
 
@@ -144,10 +126,10 @@ const fs= require ("fs")
             }
             
             try {
-                const fileContent = fs.readFileSync(this.filePath, 'utf8')
+                const fileContent = await fs.promises.readFile(this.filePath, 'utf8')
                 const data = JSON.parse(fileContent)
                 const updatedData = data.filter(product=>product.id!== id);
-                fs.writeFileSync(this.filePath, JSON.stringify(updatedData, null, 2));
+                await fs.promises.writeFile(this.filePath, JSON.stringify(updatedData, null, 2));
                 console.log (this.products);
                 return `El producto con ID ${id} fue eliminado exitosamente`
              
@@ -173,7 +155,7 @@ module.exports= ProductManager, productManager;
 //prueba
 
 console.log(productManager.addProduct('sandía', 'fruta', 1500, 'f1111'));
-console.log(productManager.addProduct('milanesa', 'carne', 1500, 'c1112'));
+/*console.log(productManager.addProduct('milanesa', 'carne', 1500, 'c1112'));
 console.log(productManager.addProduct('jamón crudo', 'fiambre', 1800, 'fi1113'));
 
 console.log(productManager.addProduct('melón', 'fruta', 700, 'c1112'));
@@ -192,4 +174,4 @@ console.log(productManager.getProductById(4))
 console.log(productManager.updateProduct(5, {description:'vegetal'}))
 console.log(productManager.updateProduct(3, {stock:5}))
 console.log(productManager.deleteProduct(4))
-console.log(productManager.deleteProduct(6))
+console.log(productManager.deleteProduct(6))*/

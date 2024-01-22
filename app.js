@@ -17,18 +17,15 @@ const productManager =  new ProductManager ()
 
 
 
-app.get('/products',  (req, res)=>{
-    const data=  productManager.getProducts() 
-   res.json(data)
-
-    //console.log(data)
+app.get('/products',  async (req, res)=>{
+    const data=  await productManager.getProducts() 
     
-    
-    const limit = parseInt(req.query.limit);
+    const limite = parseInt(req.query.limit);
   
-    const products = limit ? data.slice(0,limit) : data
+    const products = limite ? data.slice(0,limite) : data
    
-    res.json(products);
+      res.json(products);
+   
 
 
         
