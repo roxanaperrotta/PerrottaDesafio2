@@ -54,9 +54,10 @@ const fs= require ("fs")
 //Agregar al array  
  
         else{
-              this.products.push(newProduct)   
-              const productoAgregado = await fs.promises.writeFile (this.filePath, JSON.stringify (this.products, null, 2))
-              console.log(productoAgregado);
+              this.products.push(newProduct);   
+              await fs.promises.writeFile (this.filePath, JSON.stringify (this.products, null, 2))
+             // const productoAgregado =await fs.promises.readFile(this.filePath, 'utf8')
+              //console.log(productoAgregado);
               return  `Producto con código ${code} agregado`
         }
        
@@ -89,10 +90,10 @@ const fs= require ("fs")
          //console.log(fileContent)
          const productsById = JSON.parse(fileContent)
          const productoPorId=productsById.find(product=>product.id===id)
-         console.log(productoPorId)
+       // console.log(productoPorId)
         
 
-          //return productoId
+         return productoPorId
          }   
 }
 
@@ -154,24 +155,39 @@ module.exports= ProductManager, productManager;
 
 //prueba
 
-console.log(productManager.addProduct('sandía', 'fruta', 1500, 'f1111'));
-/*console.log(productManager.addProduct('milanesa', 'carne', 1500, 'c1112'));
-console.log(productManager.addProduct('jamón crudo', 'fiambre', 1800, 'fi1113'));
+productManager.addProduct('sandía', 'fruta', 1500, 'f1111').then (result => console.log(result))
+ .catch (error=>console.error(error)) 
 
-console.log(productManager.addProduct('melón', 'fruta', 700, 'c1112'));
-console.log(productManager.addProduct('lechuga'));
-console.log(productManager.addProduct('lechuga', 'verdura', 900));
+productManager.addProduct('milanesa', 'carne', 1500, 'c1112').then (result => console.log(result))
+ .catch (error=>console.error(error))
+productManager.addProduct('jamón crudo', 'fiambre', 1800, 'fi1113').then (result => console.log(result))
+.catch (error=>console.error(error));
 
-console.log(productManager.addProduct('lechuga', 'verdura', 900, 'v1234'));
+productManager.addProduct('melón', 'fruta', 700, 'c1112').then (result => console.log(result))
+ .catch (error=>console.error(error));
+productManager.addProduct('lechuga').then (result => console.log(result))
+ .catch (error=>console.error(error));
+productManager.addProduct('lechuga', 'verdura', 900).then (result => console.log(result))
+ .catch (error=>console.error(error));
 
-console.log(productManager.addProduct('remolacha', 'verdura', 3000, 'v6789'))
+productManager.addProduct('lechuga', 'verdura', 900, 'v1234').then (result => console.log(result))
+ .catch (error=>console.error(error));
+
+productManager.addProduct('remolacha', 'verdura', 3000, 'v6789').then (result => console.log(result))
+.catch (error=>console.error(error));
 
 console.log('---------------------')
 
-console.log(productManager.getProducts())
-console.log(productManager.getProductById(4))
+productManager.getProducts().then (products => console.log(products))
+ .catch (error=>console.error(error));
 
-console.log(productManager.updateProduct(5, {description:'vegetal'}))
-console.log(productManager.updateProduct(3, {stock:5}))
-console.log(productManager.deleteProduct(4))
-console.log(productManager.deleteProduct(6))*/
+productManager.getProductById(2).then (idproduct => console.log(idproduct))
+.catch (error=>console.error(error))
+
+
+productManager.updateProduct(5, {description:'vegetal'}).then (modified => console.log(modified))
+ .catch (error=>console.error(error))
+productManager.deleteProduct(4).then (result => console.log(result))
+.catch (error=>console.error(error))
+productManager.deleteProduct(6).then (result => console.log(result))
+//.catch (error=>console.error(error));

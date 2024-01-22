@@ -2,12 +2,15 @@
 const express= require("express");
 const app=express();
 
+
+
 const PORT= 8080;
 
 const cors = require('cors');
 
 app.use(cors());
-
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 const ProductManager = require("./ProductManager")
 
@@ -32,15 +35,15 @@ app.get('/products',  async (req, res)=>{
    
 })
 
-app.get('/productId/:productId',  (req, res)=>{
+app.get('/productId/:productId',  async (req, res)=>{
     const productId = req.params.productId;
-    const data = productManager.getProducts()
+    const data = await productManager.getProducts()
     const product = data.find((p)=>p.id==productId);
  
     if (!product) {
         return res.status(404).json({ error: "Producto no encontrado" });
       }
-       res.json(product);
+     res.json(product);
     });
 
 
