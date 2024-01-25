@@ -1,38 +1,29 @@
 [
   {
     "id": 1,
-    "title": "sandía",
+    "title": "pera",
     "description": "fruta",
-    "price": 1500,
+    "price": 3000,
     "thumbnail": "imagen no disponible",
-    "code": "f1111",
+    "code": "pf200",
     "stock": 10
   },
   {
     "id": 2,
-    "title": "milanesa",
-    "description": "carne",
-    "price": 1500,
+    "title": "manzana verde",
+    "description": "fruta",
+    "price": 4000,
     "thumbnail": "imagen no disponible",
-    "code": "c1112",
+    "code": "fm280",
     "stock": 10
   },
   {
     "id": 3,
-    "title": "jamón crudo",
-    "description": "fiambre",
-    "price": 1800,
+    "title": "fresa",
+    "description": "fruta",
+    "price": 4000,
     "thumbnail": "imagen no disponible",
-    "code": "fi1113",
-    "stock": 10
-  },
-  {
-    "id": 5,
-    "title": "remolacha",
-    "description": "vegetal",
-    "price": 3000,
-    "thumbnail": "imagen no disponible",
-    "code": "v6789",
+    "code": "fm280",
     "stock": 10
   }
 ]

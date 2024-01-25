@@ -1,5 +1,5 @@
 
-const fs= require ("fs")
+const fs= require ("fs");
 
  class ProductManager{
     constructor (){
@@ -27,7 +27,7 @@ const fs= require ("fs")
 
     // Validación de inputs
 
-        if (typeof title !== 'string' || title.trim() === '') {
+       if (typeof title !== 'string' || title.trim() === '') {
             return '!!Atención: Título inválido o faltante';
         }
         if (typeof description !== 'string') {
@@ -55,11 +55,11 @@ const fs= require ("fs")
  
         else{
               this.products.push(newProduct);   
-              await fs.promises.writeFile (this.filePath, JSON.stringify (this.products, null, 2))
+              await fs.promises.writeFile (this.filePath, JSON.stringify (this.products, null, 2));
              // const productoAgregado =await fs.promises.readFile(this.filePath, 'utf8')
               //console.log(productoAgregado);
               return  `Producto con código ${code} agregado`
-        }
+        };
        
     };
  
@@ -77,47 +77,45 @@ const fs= require ("fs")
             }
         } catch (error) {
             console.error('Error reading or parsing the file:', error);
-       
+            return [];
         }
     }
     
 //Obtener producto por id
 
     async getProductById(id){
-
-        if (fs.existsSync(this.filePath)){
-         let fileContent =  await fs.promises.readFile(this.filePath, 'utf8')
+       
+      if (fs.existsSync(this.filePath)){
+         let fileContent  =  await fs.promises.readFile(this.filePath, 'utf8');
          //console.log(fileContent)
-         const productsById = JSON.parse(fileContent)
-         const productoPorId=productsById.find(product=>product.id===id)
-       // console.log(productoPorId)
-        
-
-         return productoPorId
+         const data = JSON.parse(fileContent);
+         const productoPorId=data.find((p)=>p.id==id); 
+         //console.log(productoPorId)
+         return productoPorId;
          }   
 }
-
-    async updateProduct (id, updatedFields){
+    
+async updateProduct (id, updatedFields){
    
-        let foundProduct = this.products.find(product=>product.id===id)
+        let foundProduct = this.products.find(product=>product.id===id);
        
         if (foundProduct){
             let selectedProduct = foundProduct;
             Object.assign(selectedProduct, updatedFields);
             const updatedProductString = JSON.stringify(this.products, null, 2)
             await fs.promises.writeFile(this.filePath, updatedProductString);
-            console.log(foundProduct)
+            //console.log(foundProduct)
             return `El producto con ID ${id} fue modificado exitosamente. `
         }
 
        else { 
-        return "Producto con es ID no encontrado"
+        return "Producto con ese ID no encontrado"
        }
-    }
+    };
    
    async deleteProduct (id){
         
-        let foundProduct = this.products.find(product=>product.id===id)
+        let foundProduct = this.products.find(product=>product.id===id);
 
         if (foundProduct){
 
@@ -127,8 +125,8 @@ const fs= require ("fs")
             }
             
             try {
-                const fileContent = await fs.promises.readFile(this.filePath, 'utf8')
-                const data = JSON.parse(fileContent)
+                const fileContent = await fs.promises.readFile(this.filePath, 'utf8');
+                const data = JSON.parse(fileContent);
                 const updatedData = data.filter(product=>product.id!== id);
                 await fs.promises.writeFile(this.filePath, JSON.stringify(updatedData, null, 2));
                 console.log (this.products);
@@ -136,16 +134,14 @@ const fs= require ("fs")
              
             } catch (error) {
                 return `Error eliminando el producto. Error ${error}`
-            }
+            };
         }
         else{
             return `Producto con ID ${id} no encontrado`
-        }
-    }
-           
+        };
+    };  
     
-    
-}
+};
 
 
 
@@ -155,7 +151,7 @@ module.exports= ProductManager, productManager;
 
 //prueba
 
-productManager.addProduct('sandía', 'fruta', 1500, 'f1111').then (result => console.log(result))
+/*productManager.addProduct('sandía', 'fruta', 1500, 'f1111').then (result => console.log(result))
  .catch (error=>console.error(error)) 
 
 productManager.addProduct('milanesa', 'carne', 1500, 'c1112').then (result => console.log(result))
@@ -190,4 +186,4 @@ productManager.updateProduct(5, {description:'vegetal'}).then (modified => conso
 productManager.deleteProduct(4).then (result => console.log(result))
 .catch (error=>console.error(error))
 productManager.deleteProduct(6).then (result => console.log(result))
-//.catch (error=>console.error(error));
+//.catch (error=>console.error(error));*/
