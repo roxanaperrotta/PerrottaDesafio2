@@ -55,8 +55,9 @@ router.put("/:pid", async(req, res)=>{
         res.json(productoActualizado)
     }
     catch(error){
-res.status(500).json({error: error.message});
+    res.status(500).json({error: error.message});
     }
+})
 
 router.delete('/:pid', async (req, res)=>{
     try {
@@ -67,7 +68,6 @@ router.delete('/:pid', async (req, res)=>{
     } catch (error) {
         res.status(500).json({error: error.message})
     };
-});
 });
 
 

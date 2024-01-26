@@ -30,6 +30,7 @@ router.get("/api/carts", (req, res)=>{
     } catch (error) {
         res.status(500).json({error:error.message});
     }
+    })  
 
     router.post("/cart/:cid/product/:pid", async(req, res)=>{
     try{
@@ -54,7 +55,6 @@ router.delete("/cart/:cid/product/:pid", async(req, res)=>{
     };
 });
  
-}
-)
+
 
 module.exports= router;
