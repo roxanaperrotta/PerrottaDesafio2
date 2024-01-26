@@ -4,11 +4,7 @@ const cartManager = new CartManager;
 
 const router = express.Router();
 
-router.get("/api/carts", (req, res)=>{
-    
-    res.json(this.carts)
-})
- router.post("/cart", async (req, res)=>{
+router.post("/", async (req, res)=>{
     try {
         const cart=req.body
         const newCart = await cartManager.addCart(cart)
@@ -20,7 +16,7 @@ router.get("/api/carts", (req, res)=>{
     }
  });
 
- router.get("/cart/:cid", async (req, res)=>{
+ router.get("/:cid", async (req, res)=>{
     try {
         const id = parseInt (req.params.cid);
         const cart = await cartManager.getCartById(id);
@@ -32,7 +28,7 @@ router.get("/api/carts", (req, res)=>{
     }
     })  
 
-    router.post("/cart/:cid/product/:pid", async(req, res)=>{
+    router.post("/:cid/product/:pid", async(req, res)=>{
     try{
     const cartId=parseInt(req.params.cid);
     const productId=parseInt(req.params.pid);
@@ -43,7 +39,7 @@ router.get("/api/carts", (req, res)=>{
      };
     });
 
-router.delete("/cart/:cid/product/:pid", async(req, res)=>{
+   /*router.delete("/:cid/product/:pid", async(req, res)=>{
     try {
         const cartId = parseInt(req.params.cid);
         const productId=parseInt(req.params.pid);
@@ -53,7 +49,7 @@ router.delete("/cart/:cid/product/:pid", async(req, res)=>{
         res.status(500).json({error:error.message})
         
     };
-});
+});*/
  
 
 

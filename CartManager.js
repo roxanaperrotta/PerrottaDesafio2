@@ -8,10 +8,20 @@ const productManager = new ProductManager
 class CartManager{
     constructor (){
         this.filePath = "carts.json";
-        this.carts = [];
+        this.carts = [{}];
         
     };
-    
+     async getCarts() {
+        try {
+            const data = await fs.promises.readFile (this.filePath, "utf8");
+           // this.carts = JSON.parse(data);
+            return data;
+        } catch (error) {
+            console.error('Error reading or parsing the file:', error);
+            
+        };
+    };
+
     async addCart(){
         this.getCarts();
         const newCart={
@@ -31,16 +41,7 @@ class CartManager{
         };
     }
    
-    async getCarts() {
-        try {
-            const data = await fs.promises.readFile (this.filePath, "utf8");
-            this.carts = JSON.parse (data);
-            return this.carts;
-        } catch (error) {
-            console.error('Error reading or parsing the file:', error);
-            
-        };
-    };
+   
 
     
     
