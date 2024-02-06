@@ -1,6 +1,6 @@
-const fs = require("fs")
+import fs from "fs";
 
-const ProductManager = require("./ProductManager")
+import ProductManager from "./ProductManager.js"
 const productManager = new ProductManager
 
 
@@ -117,7 +117,7 @@ class CartManager{
 
 const cartManager = new CartManager();
 
-module.exports=CartManager, cartManager;
+export default CartManager 
 
 //cartManager.addCart('sandía').then (result => console.log(result))
  //.catch (error=>console.error(error)) 

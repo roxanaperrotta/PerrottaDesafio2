@@ -1,5 +1,5 @@
 
-const fs= require ("fs");
+import fs from "fs"
 
  class ProductManager{
     constructor (){
@@ -147,7 +147,7 @@ async updateProduct (id, updatedFields){
 
 const productManager = new ProductManager()
 
-module.exports= ProductManager, productManager;
+export default ProductManager
 
 //prueba
 
