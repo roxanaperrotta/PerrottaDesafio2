@@ -1,8 +1,9 @@
 const socket = io ();
 socket.emit("mensaje", "Comunicación desde websocket")
 
-socket.on ("products", products => {
-    console.log(products)
+
+ socket.on ("products",  products =>{ 
+   // console.log(products)
     const productsContainer = document.getElementById("table")
     productsContainer.innerHTML = `
     <tr>
@@ -16,7 +17,7 @@ socket.on ("products", products => {
     </tr>
     `
 
-        products.forEach((product) => {
+    products.forEach((product) => {
         productsContainer.innerHTML += `
         <tr>
             <td>${product.id}</td>
@@ -24,28 +25,30 @@ socket.on ("products", products => {
             <td>${product.description}</td>
             <td>${product.code}</td>
             <td>${product.price}</td>
-            <td>${product.status}</td>
             <td>${product.stock}</td>
-            <td>${product.category}</td>
             <td>${product.thumbnail}</td>
-        </tr>
-     `   
+        </tr>`;
+    
    })
 })
 
 document.getElementById("addNewProduct").addEventListener("submit", (event) => {
     event.preventDefault()
 
-    socket.emit("new-Product", {
-        title: document.getElementById("title").value,
-        description: document.getElementById("description").value,
-        code: document.getElementById("code").value,
-        price: document.getElementById("price").value,
-        stock: document.getElementById("stock").value,
-        thumbnail: document.getElementById("thumbnail").value
-    })
-    event.target.reset();
+
+             socket.emit("new-Product", {
+                title: document.getElementById("title").value,
+                description: document.getElementById("description").value,
+                code: document.getElementById("code").value,
+                price: parseInt(document.getElementById("price").value), 
+                stock: parseInt(document.getElementById("stock").value), 
+                thumbnail: "no disponible"
+            });
+            
+            event.target.reset();
+            
 });
+
 
 document.getElementById("deleteProduct").addEventListener("submit", (event) => {
     event.preventDefault()

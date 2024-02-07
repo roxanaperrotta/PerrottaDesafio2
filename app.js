@@ -1,28 +1,29 @@
 
 import express from "express";
-const app=express();
 import path from "path";
 import productsRouter from "./routes/products.router.js";
 import cartsRouter from "./routes/carts.router.js";
-import viewsRouter from "../Perrotta_PreEntrega1/routes/viewsRouter.js";
+import viewsRouter from "../PerrottaDesafio4/routes/viewsRouter.js";
 import cors from 'cors';
 import {Server} from "socket.io";
 import handlebars from 'express-handlebars';
 import {fileURLToPath} from "url";
 import {dirname} from "path";
-import ProductManager from "./ProductManager.js";
+import {ProductManager} from "./ProductManager.js";
 import CartManager from "./CartManager.js";
 
-const productManager =  new ProductManager ();
+
 
 
 
 
 const PORT= 8080;
-
+const app=express();
 
 const __fileName =  fileURLToPath (import.meta.url);
 const __dirnombre = dirname(__fileName);
+const productManager =  new ProductManager ();
+
 
 app.use(cors());
 app.use(express.json());
@@ -53,23 +54,40 @@ const httpServer = app.listen(PORT, () =>  console.log (`Server running on PORT 
 const socketServer = new Server (httpServer)
 
 
-socketServer.on("connection" , socket =>{
+socketServer.on("connection" , (socket) =>{
     console.log ("Nueva conexión");
     socket.on("mensaje", data =>{
-       console.log("mensaje", data)
-    })
+      console.log("mensaje", data)});
 
 
     try {
         const products = productManager.getProducts();
         socketServer.emit("products", products);
+
     } catch (error) {
         socketServer.emit('response', { status: 'error', message: error.message });
     }
-    
-   socket.on("new-Product", async (newProduct) => {
+   
+
+     socket.on("new-Product",   (newProduct) => {
+        
         try {
+
+           // Validate price
+if (typeof newProduct.price !== 'number') {
+    console.error('Price must be a number');
+    // Handle the error accordingly
+}
+
+// Validate stock
+if (typeof newProduct.stock !== 'number') {
+    console.error('Stock must be a number');
+    // Handle the error accordingly
+}
+                
+            
             const productoNuevo = {
+                  
                     title: newProduct.title,
                     description: newProduct.description,
                     code: newProduct.code,
@@ -78,22 +96,26 @@ socketServer.on("connection" , socket =>{
                     thumbnail: newProduct.thumbnail,
     
             }
-            const pushProduct = await productManager.addProduct(productoNuevo);
-            const listaActualizada = await productManager.getProducts();
-            socketServer.emit("productos", listaActualizada);
+            
+
+            const pushProduct =   productManager.addProduct(productoNuevo);
+            const listaActualizada =   productManager.getProducts();
+            socketServer.emit("products", listaActualizada);
             socketServer.emit("response", { status: 'success' , message: pushProduct});
 
         } catch (error) {
             socketServer.emit('response', { status: 'error', message: error.message });
         }
     })
+  
 
-    socket.on("delete-product", async(id) => {
+
+    socket.on("delete-product", (id) => {
         try {
             const pid = parseInt(id)
-            const deleteProduct = await productManager.deleteProduct(pid)
-            const listaActualizada = await productManager.getProducts()
-            socketServer.emit("productos", listaActualizada)
+            const deleteProduct =  productManager.deleteProduct(pid)
+            const listaActualizada =  productManager.getProducts()
+            socketServer.emit("products", listaActualizada)
             socketServer.emit('response', { status: 'success' , message: "producto eliminado correctamente"});
         } catch (error) {
             socketServer.emit('response', { status: 'error', message: error.message });
@@ -103,7 +125,7 @@ socketServer.on("connection" , socket =>{
 })
 
 
-export default ProductManager
+//export default ProductManager
 
 
 

@@ -1,30 +1,56 @@
 
 import fs from "fs"
 
- class ProductManager{
+ export class ProductManager{
     constructor (){
-        this.filePath = ".products.json"
         this.products = []
-        
-
+        this.filePath = ".products.json"
     };
 
-   
-    async addProduct(title, description, price, code, thumbnail="imagen no disponible",  stock=10){
-        
-    // crear el producto nuevo
 
+//Obtener productos
+    getProducts() {
+       try {
+         if (fs.existsSync(this.filePath)) {
+                let fileContent =  fs.readFileSync(this.filePath, 'utf8');
+                this.products =  JSON.parse(fileContent);
+                return this.products;
+            }
+       } catch (error) {
+         console.error('Error reading or parsing the file:', error);
+        return [];
+       }
+    }    
+//Obtener producto por id
+
+      getProductById(id){
+       
+       if (fs.existsSync(this.filePath)){
+         let fileContent  =   fs.readFileSync(this.filePath, 'utf8');
+         //console.log(fileContent)
+         const data = JSON.parse(fileContent);
+         const productoPorId=data.find((p)=>p.id==id); 
+         //console.log(productoPorId)
+         return productoPorId;
+         }   
+        }
+
+ // crear el producto nuevo
+
+      addProduct (product){
+    
+        const {title, description, code, price, thumbnail="imagen no disponible",  stock=10} = product
+    
         const newProduct={
             id: this.products.length + 1,
-            title,
-            description,
-            price, 
-            thumbnail, 
-            code,
-            stock
-
+            title:title,
+            description:description,
+            code:code,
+            price:price, 
+            stock:stock,
+            thumbnail:thumbnail
         };
-
+     
     // Validación de inputs
 
        if (typeof title !== 'string' || title.trim() === '') {
@@ -33,9 +59,9 @@ import fs from "fs"
         if (typeof description !== 'string') {
             return '!!Atención: Descripción inválida';
         }
-        if (typeof price !== 'number' || price < 0) {
-            return '!!Atención: Precio inválido';
-        }
+       if (typeof price !== 'number' || price < 0) {
+          return '!!Atención: Precio inválido';
+       }
         if (typeof code !== 'string' || code.trim() === '') {
             return '!!Atención: Código inválido o faltante';
         }
@@ -53,57 +79,33 @@ import fs from "fs"
 
 //Agregar al array  
  
-        else{
-              this.products.push(newProduct);   
-              await fs.promises.writeFile (this.filePath, JSON.stringify (this.products, null, 2));
-             // const productoAgregado =await fs.promises.readFile(this.filePath, 'utf8')
+        this.products.push(newProduct);
+        console.log("El producto fue agregado con exito");
+    
+
+       try{ 
+              fs.writeFileSync(this.filePath, JSON.stringify (this.products));
+              //const productoAgregado = fs.readFile(this.filePath, 'utf8')
               //console.log(productoAgregado);
               return  `Producto con código ${code} agregado`
-        };
+       }catch (error) {
+          console.error("No se pudo guardar el producto", error);
+           throw error;
+       }
        
     };
- 
-//Obtener productos
 
-  
-       
-
-    async getProducts() {
-        try {
-            if (fs.existsSync(this.filePath)) {
-                let fileContent = await fs.promises.readFile(this.filePath, 'utf8');
-                this.products =  JSON.parse(fileContent);
-                return this.products;
-            }
-        } catch (error) {
-            console.error('Error reading or parsing the file:', error);
-            return [];
-        }
-    }
+      
     
-//Obtener producto por id
-
-    async getProductById(id){
-       
-      if (fs.existsSync(this.filePath)){
-         let fileContent  =  await fs.promises.readFile(this.filePath, 'utf8');
-         //console.log(fileContent)
-         const data = JSON.parse(fileContent);
-         const productoPorId=data.find((p)=>p.id==id); 
-         //console.log(productoPorId)
-         return productoPorId;
-         }   
-}
-    
-async updateProduct (id, updatedFields){
+  updateProduct (id, updatedFields){
    
         let foundProduct = this.products.find(product=>product.id===id);
        
         if (foundProduct){
             let selectedProduct = foundProduct;
             Object.assign(selectedProduct, updatedFields);
-            const updatedProductString = JSON.stringify(this.products, null, 2)
-            await fs.promises.writeFile(this.filePath, updatedProductString);
+            const updatedProductString = JSON.stringify(this.products)
+            fs.writeFileSync(this.filePath, updatedProductString);
             //console.log(foundProduct)
             return `El producto con ID ${id} fue modificado exitosamente. `
         }
@@ -113,7 +115,7 @@ async updateProduct (id, updatedFields){
        }
     };
    
-   async deleteProduct (id){
+     deleteProduct (id){
         
         let foundProduct = this.products.find(product=>product.id===id);
 
@@ -125,10 +127,10 @@ async updateProduct (id, updatedFields){
             }
             
             try {
-                const fileContent = await fs.promises.readFile(this.filePath, 'utf8');
+                const fileContent =   fs.readFileSync(this.filePath, 'utf8');
                 const data = JSON.parse(fileContent);
                 const updatedData = data.filter(product=>product.id!== id);
-                await fs.promises.writeFile(this.filePath, JSON.stringify(updatedData, null, 2));
+                 fs.writeFileSync(this.filePath, JSON.stringify(updatedData));
                 console.log (this.products);
                 return `El producto con ID ${id} fue eliminado exitosamente`
              
@@ -143,7 +145,7 @@ async updateProduct (id, updatedFields){
     
 };
 
-
+ 
 
 const productManager = new ProductManager()
 
