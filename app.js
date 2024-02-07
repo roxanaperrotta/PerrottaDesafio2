@@ -9,8 +9,8 @@ import {Server} from "socket.io";
 import handlebars from 'express-handlebars';
 import {fileURLToPath} from "url";
 import {dirname} from "path";
-import {ProductManager} from "./ProductManager.js";
-import CartManager from "./CartManager.js";
+import {ProductManager} from "./managers/ProductManager.js";
+import CartManager from "./managers/CartManager.js";
 
 
 

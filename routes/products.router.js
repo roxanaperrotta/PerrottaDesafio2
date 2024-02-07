@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 
-import ProductManager from "../ProductManager.js"
+import ProductManager from "../managers/ProductManager.js"
 
 const productManager = new ProductManager;
 
